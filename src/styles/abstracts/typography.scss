@@ -1,0 +1,17 @@
+@import '~@/styles/abstracts/mixins';
+@import '~@/styles/abstracts/variables.scss';
+
+@include apply-typography('header', var(--body-color), ['28px', '32px', '40px', '64px']);
+@include apply-typography('body', var(--body-color), ['12px', '14px', '16px', '24px']);
+
+@each $name in $colors {
+  .text-#{$name} {
+    color: var(--#{$name}-color) !important;
+  }
+}
+
+@for $i from 1 through 7 {
+  h#{$i} {
+    font-weight: $font-weight-medium;
+  }
+}

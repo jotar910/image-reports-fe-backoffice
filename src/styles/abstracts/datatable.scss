@@ -1,0 +1,59 @@
+@import '@/styles/abstracts/variables';
+
+.p-datatable {
+  .p-datatable-thead {
+    & > tr[role='row'] {
+      & > th[role='cell'] {
+        background: transparent;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .p-datatable-tbody {
+    & > tr[role='row'].p-datatable-emptymessage {
+      & > td {
+        justify-content: center;
+      }
+    }
+
+    & > tr[role='row'] {
+      &:last-child {
+        & > td[role='cell'] {
+          border-bottom: none;
+        }
+      }
+
+      // breakpoint from PrimeVue - override lib styles.
+      @media screen and (max-width: 960px) {
+        & > td[role='cell'] {
+          grid-template-columns: minmax(25%, 150px) minmax(65%, 450px);
+          justify-content: flex-start;
+          display: grid;
+          column-gap: $spacer-lg;
+
+          &:last-child {
+            display: none;
+          }
+        }
+
+        &:after {
+          content: '';
+          height: 10px;
+          display: block;
+        }
+      }
+
+      @media screen and (max-width: $breakpoint-sm) {
+        & > td[role='cell'] {
+          grid-template-columns: 1fr;
+          row-gap: $spacer-sm;
+        }
+      }
+    }
+  }
+
+  .p-datatable-loading-overlay {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}

@@ -1,0 +1,6 @@
+.p-sidebar {
+  // breakpoint from PrimeVue - override lib styles.
+  @media screen and (max-width: 64em) {
+    width: 100vw !important;
+  }
+}

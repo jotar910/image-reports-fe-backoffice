@@ -1,0 +1,5 @@
+@import '@/styles/abstracts/mixins';
+
+.image {
+  @include apply-image-sizes(['100px', '300px', '500px', '700px']);
+}

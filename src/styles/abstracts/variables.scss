@@ -1,0 +1,29 @@
+@use 'sass:map';
+@import '~primeflex/src/variables';
+
+$colors: 'primary', 'secondary', 'success', 'warning', 'error', 'info', 'placeholder';
+
+$base-font-size: 16px;
+
+$font-weight-thin: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$spacer-2xs: 4px;
+$spacer-xs: 8px;
+$spacer-sm: 12px;
+$spacer-md: 16px;
+$spacer-lg: 18px;
+$spacer-xl: 24px;
+$spacer-2xl: 32px;
+$spacer-3xl: 48px;
+$spacer-4xl: 80px;
+
+$breakpoint-xs: 375px;
+$breakpoint-sm: map.get($breakpoints, 'sm');
+$breakpoint-md: map.get($breakpoints, 'md');
+$breakpoint-lg: map.get($breakpoints, 'lg');
+$breakpoint-xl: map.get($breakpoints, 'xl');
+$breakpoint-2xl: 1600px;
+$breakpoint-3xl: 1920px;

@@ -1,0 +1,7 @@
+@import '@/styles/abstracts/mixins';
+
+.p-button {
+  .p-button-icon {
+    font-size: to-rem(12px);
+  }
+}

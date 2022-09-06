@@ -1,0 +1,22 @@
+@import 'abstracts/avatars';
+@import 'abstracts/buttons';
+@import 'abstracts/cards';
+@import 'abstracts/colors';
+@import 'abstracts/component';
+@import 'abstracts/datatable';
+@import 'abstracts/images';
+@import 'abstracts/mixins';
+@import 'abstracts/paginator';
+@import 'abstracts/progressbar';
+@import 'abstracts/sidebar';
+@import 'abstracts/scrollpanel';
+@import 'abstracts/transitions';
+@import 'abstracts/typography';
+@import 'abstracts/utils';
+@import 'abstracts/variables';
+
+body {
+  @extend %default-font;
+  margin: 0;
+  overflow: hidden;
+}

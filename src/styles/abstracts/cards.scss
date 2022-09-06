@@ -1,0 +1,28 @@
+@import '@/styles/abstracts/mixins';
+@import '@/styles/abstracts/variables';
+
+.p-card {
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius:$spacer-xs;
+  position: relative;
+  width: 100%;
+
+  .p-card-body {
+    @extend %card-spacer;
+  }
+
+  .p-card-content {
+    padding: 0;
+  }
+
+  .p-card-header ~ .p-card-content {
+    padding: 1rem 0;
+  }
+
+  .p-card-content {
+    .p-datatable {
+      position: static;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.p-avatar {
+  &.p-avatar-image {
+    overflow: hidden;
+
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+}

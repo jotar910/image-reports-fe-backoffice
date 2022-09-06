@@ -1,0 +1,44 @@
+@import '@/styles/abstracts/variables';
+
+.p-paginator {
+  @extend .typ-body-sm-regular;
+  border-bottom: none;
+  justify-content: flex-end;
+  margin-bottom: $spacer-xs;
+  row-gap: $spacer-2xs;
+
+  .p-paginator-left-content,
+  .p-paginator-right-content {
+    margin: 0;
+  }
+
+  .p-paginator-left-content {
+    align-items: center;
+    display: flex;
+    gap: $spacer-sm;
+
+    & > [data-rows-label]::after {
+      content: attr(data-rows-label);
+    }
+
+    & ~ .p-paginator-rpp-options {
+      margin-right: auto;
+    }
+  }
+
+  .p-paginator-current:nth-of-type(2) {
+    height: 0;
+    flex-basis: 0;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+
+    @media screen and (max-width: $breakpoint-md) {
+      flex-basis: 100%;
+    }
+  }
+
+  .pi {
+    font-size: inherit;
+  }
+}

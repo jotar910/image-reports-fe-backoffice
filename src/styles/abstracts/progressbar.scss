@@ -1,0 +1,18 @@
+@import '@/styles/abstracts/variables';
+
+.p-progressbar {
+  height: 16px;
+  min-width: 64px;
+
+  .p-progressbar-value {
+    opacity: 0.75;
+  }
+
+  @each $name in $colors {
+    &.color-#{$name} {
+      .p-progressbar-value {
+        background: var(--#{$name}-color);
+      }
+    }
+  }
+}
