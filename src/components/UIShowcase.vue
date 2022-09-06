@@ -256,7 +256,7 @@ import InputText from 'primevue/inputtext';
 import Radio from 'primevue/radiobutton';
 import dateFilter from '@/filters/date';
 import reportStatusFilter from '@/filters/report-status';
-import ReportsTable from '@/components/reports/ReportsTable.vue';
+import ReportsTable from '@/components/reports/list/ReportsTable.vue';
 import Card from 'primevue/card';
 import Sidebar from 'primevue/sidebar';
 import Image from 'primevue/image';

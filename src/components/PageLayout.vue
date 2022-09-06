@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <header>
-      <Card class="border-round-0">
+      <Card class="border-round-0 border-none">
         <template #content>
           <div class="header-wrapper">
             <slot name="header"></slot>
@@ -26,6 +26,8 @@ import Card from 'primevue/card';
 @import '@/styles/abstracts/variables';
 
 .page-container {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 100%;
   overflow: auto;
@@ -37,6 +39,7 @@ import Card from 'primevue/card';
   main {
     @extend %card-spacer;
     background-color: var(--body-background-color);
+    flex-grow: 1;
   }
 
   .header-wrapper,

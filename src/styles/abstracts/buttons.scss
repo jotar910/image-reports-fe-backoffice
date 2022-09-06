@@ -1,7 +1,9 @@
 @import '@/styles/abstracts/mixins';
 
 .p-button {
+  @extend %typ-body-sm-medium;
+
   .p-button-icon {
-    font-size: to-rem(12px);
+    @extend %typ-body-xs-bold;
   }
 }

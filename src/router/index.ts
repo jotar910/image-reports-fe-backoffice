@@ -4,8 +4,14 @@ import useUserGuard from './user.guard';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'UIShowcase',
-    component: () => import(/* webpackChunkName: "showCase" */ '../views/UIShowcaseView.vue'),
+    name: 'ReportsList',
+    component: () => import(/* webpackChunkName: "ReportsListView" */ '../views/ReportsListView.vue'),
+    meta: { transition: 'slide-left' }
+  },
+  {
+    path: '/prev',
+    name: 'UIShowcasePrev',
+    component: () => import(/* webpackChunkName: "showCaseOne" */ '../views/UIShowcaseView.vue'),
     meta: { transition: 'slide-left' }
   },
   {
