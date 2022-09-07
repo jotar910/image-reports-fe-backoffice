@@ -1,7 +1,7 @@
 <template>
   <DataTable :value="items" :lazy="true" responsiveLayout="stack" stripedRows
              :selectionMode="items?.length && !loading && !error ? 'single' : null" @rowSelect="onRowSelect"
-             :loading="loading" :loadingIcon="null" @rowContextmenu="$refs.reportsMenu.showContextMenu($event.originalEvent, $event.data)"
+             :loading="loading" :loadingIcon="null" @rowContextmenu="$refs.menu.showContextMenu($event.originalEvent, $event.data)"
              paginatorTemplate="RowsPerPageDropdown CurrentPageReport CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
              :paginator="true" :paginatorPosition="tableConfigs.paginatorPosition" :totalRecords="list.totalElements"
              :first="list.page * rows" :rows="rows" @page="changeTablePage"
@@ -56,7 +56,7 @@
     <Column class="max-w-2rem text-center">
       <template #body="slotProps">
         <Button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-ellipsis-h"
-                :disabled="loading" @click="$refs.reportsMenu.showMenu($event, slotProps.data)"/>
+                :disabled="loading" @click="$refs.menu.showMenu($event, slotProps.data)"/>
       </template>
     </Column>
 
@@ -75,7 +75,7 @@
     </template>
   </DataTable>
 
-  <ReportsMenu ref="reportsMenu"/>
+  <ReportsOptions ref="menu"/>
 </template>
 
 <script lang="ts" setup>
@@ -92,7 +92,7 @@ import TableField from '@/components/TableField.vue';
 import ReportEvaluation from '@/components/reports/ReportEvaluation.vue';
 import ReportsEmptyPlaceholder from '@/components/reports/list/ReportsEmptyPlaceholder.vue';
 import ReportsErrorPlaceholder from '@/components/reports/list/ReportsErrorPlaceholder.vue';
-import ReportsMenu from '@/components/reports/list/ReportsMenu.vue';
+import ReportsOptions from '@/components/reports/list/ReportsOptions.vue';
 import { PageableFactory } from '@/factories/pageable.factory';
 import { ReportListFactory } from '@/factories/report-list.factory';
 import { ReportListItemModel } from '@/models/report-list-item.model';
