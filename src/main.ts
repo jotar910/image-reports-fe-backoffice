@@ -9,9 +9,13 @@ import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import App from './App.vue';
 import router from './router';
+import ConfigProviders from '@/plugins/config-providers.plugin';
+import DataProviders from '@/plugins/data-providers.plugin';
 
 createApp(App)
   .use(router)
   .use(PrimeVue, { ripple: true })
   .use(ToastService)
+  .use(ConfigProviders)
+  .use(DataProviders)
   .mount('#app');

@@ -1,10 +1,12 @@
 <template>
-  <DataTable :value="list" :lazy="true" responsiveLayout="stack" stripedRows
-             :selectionMode="list?.length && !loading && !error ? 'single' : null" @rowSelect="onRowSelect"
-             :loading="loading" :loadingIcon="null" @rowContextmenu="$refs.contextMenu.show($event.originalEvent)"
+  <DataTable :value="items" :lazy="true" responsiveLayout="stack" stripedRows
+             :selectionMode="items?.length && !loading && !error ? 'single' : null" @rowSelect="onRowSelect"
+             :loading="loading" :loadingIcon="null" @rowContextmenu="$refs.reportsMenu.showContextMenu($event.originalEvent, $event.data)"
              paginatorTemplate="RowsPerPageDropdown CurrentPageReport CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-             :paginator="true" paginatorPosition="top" :first="0" :rows="10" :rowsPerPageOptions="[10,20,50]" :totalRecords="100"
-             :pageLinkSize="3" currentPageReportTemplate="{first} - {last} of {totalRecords}">
+             :paginator="true" :paginatorPosition="tableConfigs.paginatorPosition" :totalRecords="list.totalElements"
+             :first="list.page * rows" :rows="rows" @page="changeTablePage"
+             :rowsPerPageOptions="tableConfigs.rowsPerPage" :pageLinkSize="tableConfigs.pageLinkSize"
+             currentPageReportTemplate="{first} - {last} of {totalRecords}">
 
     <Column>
       <template #body="slotProps">
@@ -52,66 +54,93 @@
     </Column>
 
     <Column class="max-w-2rem text-center">
-      <template #body>
+      <template #body="slotProps">
         <Button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-ellipsis-h"
-                :disabled="loading" @click="$refs.menu.toggle($event)"/>
+                :disabled="loading" @click="$refs.reportsMenu.showMenu($event, slotProps.data)"/>
       </template>
     </Column>
 
     <template #empty>
       <div class="flex flex-column align-items-center text-center p-3 md:p-7">
         <ReportsEmptyPlaceholder v-if="!error"/>
-        <ReportsErrorPlaceholder v-else/>
+        <ReportsErrorPlaceholder v-else @retry="fetchInitialTableData"/>
       </div>
     </template>
 
     <template #paginatorstart>
       <div class="flex align-items-center gap-3" data-rows-label="Items per page:">
-        <Button type="button" icon="pi pi-refresh" class="p-button-text"/>
+        <Button type="button" icon="pi pi-refresh" class="p-button-text"
+                :disabled="loading" @click="fetchInitialTableData"/>
       </div>
     </template>
   </DataTable>
 
-  <Menu ref="menu" :model="options" :popup="true"/>
-  <ContextMenu ref="contextMenu" :model="options"/>
+  <ReportsMenu ref="reportsMenu"/>
 </template>
 
 <script lang="ts" setup>
+import { computed, inject, onMounted, Ref, ref } from 'vue';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
-import ContextMenu from 'primevue/contextmenu';
-import DataTable, { DataTableRowSelectEvent } from 'primevue/datatable';
-import Menu from 'primevue/menu';
+import DataTable, { DataTablePageEvent, DataTableRowSelectEvent } from 'primevue/datatable';
 import Skeleton from 'primevue/skeleton';
 import dateFilter from '@/filters/date';
+import DataTableInjector, { IDataTableConfig } from '@/configs/data-table.config';
+import ReportsListInjector, { ReportsListService } from '@/data/reports-list.data';
 import TableField from '@/components/TableField.vue';
 import ReportEvaluation from '@/components/reports/ReportEvaluation.vue';
 import ReportsEmptyPlaceholder from '@/components/reports/list/ReportsEmptyPlaceholder.vue';
 import ReportsErrorPlaceholder from '@/components/reports/list/ReportsErrorPlaceholder.vue';
-import { MenuItem } from 'primevue/menuitem';
+import ReportsMenu from '@/components/reports/list/ReportsMenu.vue';
+import { PageableFactory } from '@/factories/pageable.factory';
+import { ReportListFactory } from '@/factories/report-list.factory';
+import { ReportListItemModel } from '@/models/report-list-item.model';
+import { PageableModel } from '@/models/pageable.model';
+import { ListFiltersModel } from '@/models/list-filters.model';
 
-defineProps({
-  loading: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  error: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  list: {
-    type: Array,
-    required: true
-  },
-  options: {
-    type: Array,
-    required: false,
-    default: ([] as Array<MenuItem>)
-  }
+const service = inject(ReportsListInjector) as ReportsListService;
+const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
+
+const emptyList = ReportListFactory.emptyReportListItems(5);
+
+const list: Ref<PageableModel<ReportListItemModel>> = ref(PageableFactory.emptyPageable());
+const rows = ref(tableConfigs.defaultRows);
+const loading = ref(false);
+const error = ref(false);
+
+const items = computed<ReportListItemModel[]>(() => loading.value ? emptyList : list.value.content);
+
+onMounted(() => {
+  fetchInitialTableData();
 });
+
+function fetchInitialTableData(): void {
+  fetchTableData({
+    page: 0,
+    count: rows.value
+  });
+}
+
+function changeTablePage(event: DataTablePageEvent): void {
+  fetchTableData({
+    page: event.page,
+    count: event.rows
+  });
+}
+
+function fetchTableData(filters: ListFiltersModel): void {
+  loading.value = true;
+  service.getData(filters)
+    .then((value: PageableModel<ReportListItemModel>) => {
+      list.value = value;
+      loading.value = false;
+    })
+    .catch(() => {
+      error.value = true;
+      loading.value = false;
+    });
+}
 
 function onRowSelect(_: DataTableRowSelectEvent) {
   // TODO
