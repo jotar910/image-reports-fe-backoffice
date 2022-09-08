@@ -5,11 +5,13 @@
       <p class="typ-body-sm text-color-secondary mb-2">Prevent offensive content by managing user generated images!<br/>You can also generate images by yourself.</p>
     </section>
     <section class="flex md:block ml-auto md:py-5">
-      <Button label="Add new report" icon="pi pi-plus"/>
+      <Button label="Add new report" icon="pi pi-plus" @click="$emit('addReport')"/>
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
 import Button from 'primevue/button';
+
+defineEmits(['addReport']);
 </script>

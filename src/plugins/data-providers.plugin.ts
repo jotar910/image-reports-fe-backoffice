@@ -1,8 +1,8 @@
 import { App } from 'vue';
-import ReportsListInjector, { ReportsListService } from '@/data/reports-list.data';
+import ReportsInjector, { ReportsService } from '@/data/reports.data';
 
 export default {
   install: (app: App) => {
-    app.provide(ReportsListInjector, new ReportsListService());
+    app.provide(ReportsInjector, new ReportsService());
   }
 }

@@ -10,5 +10,3 @@ import Button from 'primevue/button';
 
 defineEmits(['retry']);
 </script>
-
-<style scoped></style>

@@ -1,6 +1,6 @@
 <template>
-  <DataTable :value="items" :lazy="true" responsiveLayout="stack" stripedRows
-             :selectionMode="items?.length && !loading && !error ? 'single' : null" @rowSelect="onRowSelect"
+  <DataTable :value="list.content" :lazy="true" responsiveLayout="stack" stripedRows
+             :selectionMode="list.content?.length && !loading && !error ? 'single' : null" @rowSelect="onRowSelect"
              :loading="loading" :loadingIcon="null" @rowContextmenu="$refs.menu.showContextMenu($event.originalEvent, $event.data)"
              paginatorTemplate="RowsPerPageDropdown CurrentPageReport CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
              :paginator="true" :paginatorPosition="tableConfigs.paginatorPosition" :totalRecords="list.totalElements"
@@ -62,7 +62,7 @@
 
     <template #empty>
       <div class="flex flex-column align-items-center text-center p-3 md:p-7">
-        <ReportsEmptyPlaceholder v-if="!error"/>
+        <ReportsEmptyPlaceholder v-if="!error" @add="$emit('addReport')"/>
         <ReportsErrorPlaceholder v-else @retry="fetchInitialTableData"/>
       </div>
     </template>
@@ -79,15 +79,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onMounted, Ref, ref } from 'vue';
+import { inject, onMounted, Ref, ref } from 'vue';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable, { DataTablePageEvent, DataTableRowSelectEvent } from 'primevue/datatable';
 import Skeleton from 'primevue/skeleton';
 import dateFilter from '@/filters/date';
-import DataTableInjector, { IDataTableConfig } from '@/configs/data-table.config';
-import ReportsListInjector, { ReportsListService } from '@/data/reports-list.data';
+import DataTableInjector, { IDataTableConfig } from '@/configs/datatable.config';
+import ReportsInjector, { ReportsService } from '@/data/reports.data';
 import TableField from '@/components/TableField.vue';
 import ReportEvaluation from '@/components/reports/ReportEvaluation.vue';
 import ReportsEmptyPlaceholder from '@/components/reports/list/ReportsEmptyPlaceholder.vue';
@@ -99,17 +99,19 @@ import { ReportListItemModel } from '@/models/report-list-item.model';
 import { PageableModel } from '@/models/pageable.model';
 import { ListFiltersModel } from '@/models/list-filters.model';
 
-const service = inject(ReportsListInjector) as ReportsListService;
+const service = inject(ReportsInjector) as ReportsService;
 const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
 
-const emptyList = ReportListFactory.emptyReportListItems(5);
+const emptyPage: PageableModel<ReportListItemModel> = PageableFactory.emptyPageable();
+const loadingItems: ReportListItemModel[] = ReportListFactory.emptyReportListItems(5);
 
-const list: Ref<PageableModel<ReportListItemModel>> = ref(PageableFactory.emptyPageable());
+const list: Ref<PageableModel<ReportListItemModel>> = ref(emptyPage);
 const rows = ref(tableConfigs.defaultRows);
 const loading = ref(false);
 const error = ref(false);
 
-const items = computed<ReportListItemModel[]>(() => loading.value ? emptyList : list.value.content);
+defineEmits(['addReport']);
+defineExpose({ refresh: fetchInitialTableData });
 
 onMounted(() => {
   fetchInitialTableData();
@@ -131,20 +133,25 @@ function changeTablePage(event: DataTablePageEvent): void {
 
 function fetchTableData(filters: ListFiltersModel): void {
   loading.value = true;
-  service.getData(filters)
-    .then((value: PageableModel<ReportListItemModel>) => {
-      list.value = value;
-      loading.value = false;
-    })
-    .catch(() => {
-      error.value = true;
-      loading.value = false;
-    });
+  error.value = false;
+  list.value = Object.assign({}, list.value, { content: loadingItems });
+  service.getList(filters)
+    .then((value) => handleFetchTableDataSuccess(value))
+    .catch(() => handleFetchTableDataError());
+}
+
+function handleFetchTableDataSuccess(value: PageableModel<ReportListItemModel>) {
+  list.value = value;
+  loading.value = false;
+}
+
+function handleFetchTableDataError() {
+  list.value = emptyPage;
+  error.value = true;
+  loading.value = false;
 }
 
 function onRowSelect(_: DataTableRowSelectEvent) {
   // TODO
 }
 </script>
-
-<style scoped></style>

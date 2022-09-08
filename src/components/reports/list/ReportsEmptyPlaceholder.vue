@@ -10,5 +10,3 @@ import Button from 'primevue/button';
 
 defineEmits(['add']);
 </script>
-
-<style scoped></style>

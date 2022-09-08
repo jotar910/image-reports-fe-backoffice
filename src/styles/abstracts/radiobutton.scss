@@ -1,0 +1,9 @@
+.p-radiobutton {
+  &.p-invalid {
+    & > .p-radiobutton-box {
+      &.p-highlight {
+        background: var(--input-invalid-color);
+      }
+    }
+  }
+}

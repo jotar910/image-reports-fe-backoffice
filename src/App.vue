@@ -4,9 +4,12 @@
       <component :is="Component"/>
     </transition>
   </router-view>
+  <Toast/>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import Toast from 'primevue/toast';
+</script>
 
 <style lang="scss">
 @import "@/styles/main.scss";

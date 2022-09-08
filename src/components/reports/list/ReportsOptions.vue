@@ -16,6 +16,11 @@ const options: ReportMenuOption[] = ReportMenuOptionFactory.options();
 const menu: Ref<Menu | null> = ref(null);
 const contextMenu: Ref<Menu | null> = ref(null);
 
+defineExpose({
+  showMenu: toggleMenu,
+  showContextMenu: toggleContextMenu
+});
+
 function toggleMenu(event: Event, config: ReportListItemModel) {
   toggle(menu.value!, contextMenu.value!, event, config);
 }
@@ -34,11 +39,4 @@ function toggle(target: Menu, other: Menu, event: Event, config: ReportListItemM
 function setMenuOptionsVisibility(config: ReportListItemModel) {
   options.forEach((option) => option.visible = () => option.key === 'Details' || config.status === 'PENDING');
 }
-
-defineExpose({
-  showMenu: toggleMenu,
-  showContextMenu: toggleContextMenu
-});
 </script>
-
-<style scoped></style>

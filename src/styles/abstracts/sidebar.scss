@@ -1,6 +1,30 @@
 .p-sidebar {
   // breakpoint from PrimeVue - override lib styles.
   @media screen and (max-width: 64em) {
+    width: 75vw !important;
+  }
+
+  // breakpoint from PrimeVue - override lib styles.
+  @media screen and (max-width: 40em) {
     width: 100vw !important;
+  }
+
+  &.p-sidebar-lg {
+    // breakpoint from PrimeVue - override lib styles.
+    @media screen and (max-width: 64em) {
+      width: 100vw !important;
+    }
+  }
+
+  .p-sidebar-header {
+    .p-sidebar-header-content {
+      margin-right: auto;
+    }
+  }
+
+  &.sidebar-h-full {
+    .p-sidebar-content {
+      height: 100%;
+    }
   }
 }

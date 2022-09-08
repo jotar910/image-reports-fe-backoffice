@@ -1,0 +1,22 @@
+.file-upload__container {
+  &.file-upload__container--invalid {
+    .p-fileupload {
+      .p-fileupload-buttonbar,
+      .p-fileupload-content {
+        border-color: var(--input-invalid-color);
+      }
+
+      .p-fileupload-buttonbar {
+        .p-button-danger.p-fileupload-choose:not(.p-disabled):hover {
+          background: var(--error-color);
+          color: #ffffff;
+          border-color: var(--error-color);
+        }
+      }
+
+      .p-fileupload-content {
+        color: var(--input-invalid-color);
+      }
+    }
+  }
+}
