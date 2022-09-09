@@ -11,9 +11,8 @@ import { ReportMenuOptionFactory } from '@/factories/report-menu-option.factory'
 import { ReportListItemModel } from '@/models/report-list-item.model';
 import { ReportMenuOption } from '@/models/report-menu-option.model';
 
-const options: ReportMenuOption[] = ReportMenuOptionFactory.options();
-
 const menu: Ref<Menu | null> = ref(null);
+const options: Ref<ReportMenuOption[]> = ref([]);
 const contextMenu: Ref<Menu | null> = ref(null);
 
 defineExpose({
@@ -37,6 +36,10 @@ function toggle(target: Menu, other: Menu, event: Event, config: ReportListItemM
 }
 
 function setMenuOptionsVisibility(config: ReportListItemModel) {
-  options.forEach((option) => option.visible = () => option.key === 'Details' || config.status === 'PENDING');
+  options.value = [
+    ReportMenuOptionFactory.detailsOption(config),
+    ReportMenuOptionFactory.approveOption(config),
+    ReportMenuOptionFactory.rejectOption(config)
+  ];
 }
 </script>

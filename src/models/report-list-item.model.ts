@@ -1,13 +1,5 @@
-import { ReportApprovalModel } from '@/models/report-approval.model';
-import { ReportEvaluationModel } from '@/models/report-evaluation.model';
-import { ReportStatusType } from '@/models/report-status.type';
+import { ReportBaseModel } from '@/models/report-base.model';
 
-export interface ReportListItemModel {
-  name: string;
-  user: string;
+export interface ReportListItemModel extends ReportBaseModel {
   image: string;
-  creationDate: number;
-  status: ReportStatusType;
-  evaluation: ReportEvaluationModel | null;
-  approval: ReportApprovalModel | null;
 }

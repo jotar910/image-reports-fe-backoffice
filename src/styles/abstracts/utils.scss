@@ -5,3 +5,13 @@
 .max-w-75 {
   max-width: 75% !important;
 }
+
+.break-word {
+  word-break: break-word !important;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -42,10 +42,9 @@ import Card from 'primevue/card';
     flex-grow: 1;
   }
 
-  .header-wrapper,
   .main-wrapper {
     margin: auto;
-    max-width: $breakpoint-2xl;
+    max-width: $breakpoint-xl;
   }
 }
 </style>

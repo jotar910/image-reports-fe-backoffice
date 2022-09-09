@@ -1,8 +1,9 @@
 import { ReportListItemModel } from '@/models/report-list-item.model';
 import { PageableModel } from '@/models/pageable.model';
 import { ListFiltersModel } from '@/models/list-filters.model';
-import { ReportListFactory } from '@/factories/report-list.factory';
+import { ReportsFactory } from '@/factories/reports.factory';
 import { CreateReportModel } from '@/models/create-report.model';
+import { ReportDetailsModel } from '@/models/report-details.model';
 
 export class ReportsService {
   add(report: CreateReportModel): Promise<void> {
@@ -18,6 +19,18 @@ export class ReportsService {
     });
   }
 
+  get(id: number): Promise<ReportDetailsModel> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (Math.random() < 0.2) {
+          reject('Error');
+          return;
+        }
+        resolve(ReportsFactory.mockReportDetails(id));
+      }, 2000);
+    });
+  }
+
   getList({ page, count }: ListFiltersModel): Promise<PageableModel<ReportListItemModel>> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -25,7 +38,7 @@ export class ReportsService {
           reject('Error');
           return;
         }
-        const items: ReportListItemModel[] = ReportListFactory.mockReportListItems();
+        const items: ReportListItemModel[] = ReportsFactory.mockReportListItems();
         const totalElements = items.length;
         resolve({
           page,

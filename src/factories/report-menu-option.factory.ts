@@ -1,24 +1,23 @@
 import { ReportMenuOption } from '@/models/report-menu-option.model';
+import { ReportListItemModel } from '@/models/report-list-item.model';
 
 export class ReportMenuOptionFactory {
-  static options = (): ReportMenuOption[] => [
-    ReportMenuOptionFactory.detailsOption(),
-    ReportMenuOptionFactory.approveOption(),
-    ReportMenuOptionFactory.rejectOption()
-  ];
-
-  private static detailsOption = (): ReportMenuOption => ({
+  static detailsOption = (config: ReportListItemModel): ReportMenuOption => ({
     key: 'Details',
-    label: 'Details'
+    label: 'Details',
+    visible: true,
+    to: `/${config.id}`
   });
 
-  private static approveOption = (): ReportMenuOption => ({
+  static approveOption = (config: ReportListItemModel): ReportMenuOption => ({
     key: 'Approve',
-    label: 'Approve'
+    label: 'Approve',
+    visible: () => config.status === 'PENDING'
   });
 
-  private static rejectOption = (): ReportMenuOption => ({
+  static rejectOption = (config: ReportListItemModel): ReportMenuOption => ({
     key: 'Reject',
-    label: 'Reject'
+    label: 'Reject',
+    visible: () => config.status === 'PENDING'
   });
 }

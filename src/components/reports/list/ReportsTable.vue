@@ -1,6 +1,6 @@
 <template>
   <DataTable :value="list.content" :lazy="true" responsiveLayout="stack" stripedRows
-             :selectionMode="list.content?.length && !loading && !error ? 'single' : null" @rowSelect="onRowSelect"
+             :selectionMode="list.content?.length && !loading && !error ? 'single' : null" @rowSelect="$emit('select', $event.data.id)"
              :loading="loading" :loadingIcon="null" @rowContextmenu="$refs.menu.showContextMenu($event.originalEvent, $event.data)"
              paginatorTemplate="RowsPerPageDropdown CurrentPageReport CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
              :paginator="true" :paginatorPosition="tableConfigs.paginatorPosition" :totalRecords="list.totalElements"
@@ -43,7 +43,7 @@
     <Column header="Evaluation">
       <template #body="slotProps">
         <div class="flex align-items-center">
-          <ReportEvaluation v-if="!loading" :record="slotProps.data"/>
+          <ReportEvaluation v-if="!loading" :report="slotProps.data"/>
           <template v-else>
             <i class="pi pi-spin pi-spinner text-color-secondary mr-3"></i>
             <Skeleton class="flex-grow-1 max-w-15rem mr-3"/>
@@ -53,7 +53,7 @@
       </template>
     </Column>
 
-    <Column class="max-w-2rem text-center">
+    <Column class="max-w-3rem text-center">
       <template #body="slotProps">
         <Button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-ellipsis-h"
                 :disabled="loading" @click="$refs.menu.showMenu($event, slotProps.data)"/>
@@ -94,7 +94,7 @@ import ReportsEmptyPlaceholder from '@/components/reports/list/ReportsEmptyPlace
 import ReportsErrorPlaceholder from '@/components/reports/list/ReportsErrorPlaceholder.vue';
 import ReportsOptions from '@/components/reports/list/ReportsOptions.vue';
 import { PageableFactory } from '@/factories/pageable.factory';
-import { ReportListFactory } from '@/factories/report-list.factory';
+import { ReportsFactory } from '@/factories/reports.factory';
 import { ReportListItemModel } from '@/models/report-list-item.model';
 import { PageableModel } from '@/models/pageable.model';
 import { ListFiltersModel } from '@/models/list-filters.model';
@@ -103,14 +103,14 @@ const service = inject(ReportsInjector) as ReportsService;
 const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
 
 const emptyPage: PageableModel<ReportListItemModel> = PageableFactory.emptyPageable();
-const loadingItems: ReportListItemModel[] = ReportListFactory.emptyReportListItems(5);
+const loadingItems: ReportListItemModel[] = ReportsFactory.emptyReportListItems(5);
 
 const list: Ref<PageableModel<ReportListItemModel>> = ref(emptyPage);
 const rows = ref(tableConfigs.defaultRows);
 const loading = ref(false);
 const error = ref(false);
 
-defineEmits(['addReport']);
+defineEmits(['addReport', 'select']);
 defineExpose({ refresh: fetchInitialTableData });
 
 onMounted(() => {

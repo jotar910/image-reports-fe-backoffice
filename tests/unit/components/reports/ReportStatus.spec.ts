@@ -1,9 +1,9 @@
 import { shallowMount } from '@vue/test-utils';
-import ReportEvaluation from '@/components/reports/ReportEvaluation.vue';
+import ReportStatus from '@/components/reports/ReportStatus.vue';
 
-describe("ReportEvaluation.vue", () => {
+describe("ReportStatus.vue", () => {
   it("should create", () => {
-    const wrapper = shallowMount(ReportEvaluation, {
+    const wrapper = shallowMount(ReportStatus, {
       props: {
         report: {}
       }

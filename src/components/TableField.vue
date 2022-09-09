@@ -1,10 +1,12 @@
 <template>
-  <Skeleton v-if="loading" :size="loadingSize" :width="loadingWidth" />
-  <div v-else><slot /></div>
+  <Skeleton v-if="loading || error" :animation="error ? 'none' : 'wave'"
+            :width="loadingWidth" :height="loadingHeight" :size="loadingSize" />
+  <div v-else class="break-word"><slot /></div>
 </template>
 
 <script lang="ts" setup>
 import Skeleton from 'primevue/skeleton';
 
-defineProps(['loading', 'loadingSize', 'loadingWidth']);
+defineProps(['loading', 'error', 'loadingWidth', 'loadingHeight', 'loadingSize']);
 </script>
+

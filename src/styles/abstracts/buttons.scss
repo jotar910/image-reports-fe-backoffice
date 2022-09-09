@@ -6,4 +6,10 @@
   .p-button-icon {
     @extend %typ-body-xs-bold;
   }
+
+  &.p-button-link {
+    &.p-button-secondary {
+      color: var(--secondary-color);
+    }
+  }
 }
