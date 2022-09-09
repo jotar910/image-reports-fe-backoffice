@@ -13,21 +13,24 @@
     </div>
     <Card>
       <template #content>
-        <ReportDetails :loading="loading" :error="error" :report="report" class="details-grid" @refresh="fetchReportDetails"/>
+        <ReportDetails :loading="loading" :error="error" :report="report" class="details-grid"
+                       @change="updateReportDetails" @refresh="fetchReportDetails"/>
       </template>
     </Card>
   </PageLayout>
 </template>
 
 <script lang="ts" setup>
+import { inject, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { merge } from 'lodash';
 import Card from 'primevue/card';
 import PageLayout from '@/components/PageLayout.vue';
 import ReportDetails from '@/components/reports/details/ReportDetails.vue';
 import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeader.vue';
 import { ReportsFactory } from '@/factories/reports.factory';
-import { inject, onMounted, ref } from 'vue';
 import ReportsInjector, { ReportsService } from '@/data/reports.data';
+import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
 import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
 const service = inject(ReportsInjector) as ReportsService;
@@ -45,6 +48,10 @@ onMounted(() => {
 
 function fetchReportDetails() {
   dataFetcher.fetch(() => service.get(+route.params.id)).do();
+}
+
+function updateReportDetails(changes: IRealtimeReportChanges) {
+  report.value = merge(report.value, changes);
 }
 </script>
 

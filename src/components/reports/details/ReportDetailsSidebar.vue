@@ -1,6 +1,7 @@
 <template>
   <Sidebar v-model:visible="visible" position="right" class="p-sidebar-lg sidebar-h-full">
-    <ReportDetails :report="report" :loading="loading" :error="error" @refresh="fetchReportDetails" class="relative">
+    <ReportDetails :report="report" :loading="loading" :error="error" class="relative"
+                   @change="updateReportDetails" @refresh="fetchReportDetails">
       <template #header>
         <ReportDetailsHeader :report="report" :loading="loading" :error="error" :showStatus="false">
           <router-link :to="'/'+report.id" class="p-button p-button-link p-button-secondary text-body truncate p-0">
@@ -20,10 +21,12 @@
 
 <script lang="ts" setup>
 import { inject, ref } from 'vue';
+import { merge } from 'lodash';
 import Sidebar from 'primevue/sidebar';
 import Skeleton from 'primevue/skeleton';
 import ReportDetails from '@/components/reports/details/ReportDetails.vue';
 import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeader.vue';
+import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
 import { ReportsFactory } from '@/factories/reports.factory';
 import ReportsInjector, { ReportsService } from '@/data/reports.data';
 import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
@@ -47,6 +50,10 @@ function show(id: number) {
 function close<T>(payload?: T) {
   emit('close', payload);
   visible.value = false;
+}
+
+function updateReportDetails(changes: IRealtimeReportChanges) {
+  report.value = merge(report.value, changes);
 }
 
 function fetchReportDetails(id: number) {

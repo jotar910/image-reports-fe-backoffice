@@ -79,15 +79,18 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, Ref, ref } from 'vue';
+import { inject, onMounted, onUnmounted, Ref, ref } from 'vue';
+import { merge } from 'lodash';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable, { DataTablePageEvent } from 'primevue/datatable';
 import Skeleton from 'primevue/skeleton';
+import { Subscription } from 'rxjs';
 import dateFilter from '@/filters/date';
 import DataTableInjector, { IDataTableConfig } from '@/configs/datatable.config';
 import ReportsInjector, { ReportsService } from '@/data/reports.data';
+import ReportsRealtimeInjector, { IRealtimeReportChanges, ReportsRealtimeService } from '@/data/reports-realtime.data';
 import TableField from '@/components/TableField.vue';
 import ReportEvaluation from '@/components/reports/ReportEvaluation.vue';
 import ReportsEmptyPlaceholder from '@/components/reports/list/ReportsEmptyPlaceholder.vue';
@@ -101,10 +104,12 @@ import { ListFiltersModel } from '@/models/list-filters.model';
 import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
 const service = inject(ReportsInjector) as ReportsService;
+const realtime = inject(ReportsRealtimeInjector) as ReportsRealtimeService;
 const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
 
 const emptyPage: PageableModel<ReportListItemModel> = PageableFactory.emptyPageable();
 const loadingItems: ReportListItemModel[] = ReportsFactory.emptyReportListItems(5);
+const subscriptions: Subscription[] = [];
 
 const rows = ref(tableConfigs.defaultRows);
 const list: Ref<PageableModel<ReportListItemModel>> = ref(emptyPage);
@@ -117,6 +122,11 @@ defineExpose({ refresh: fetchInitialTableData });
 
 onMounted(() => {
   fetchInitialTableData();
+  subscriptions.push(realtime.changes$.subscribe(handleRealtimeUpdate));
+});
+
+onUnmounted(() => {
+  subscriptions.forEach((s) => s.unsubscribe());
 });
 
 function fetchInitialTableData(): void {
@@ -159,5 +169,13 @@ function handleFetchTableDataSuccess(value: PageableModel<ReportListItemModel>) 
 function handleFetchTableDataError() {
   list.value = emptyPage;
   error.value = true;
+}
+
+function handleRealtimeUpdate(event: IRealtimeReportChanges): void {
+  const reportIndex = list.value.content.findIndex((item) => item.id === event.id);
+  if (reportIndex === -1) {
+    return;
+  }
+  list.value.content[reportIndex] = merge(list.value.content[reportIndex], event);
 }
 </script>

@@ -67,21 +67,27 @@
 </template>
 
 <script lang="ts" setup>
+import { inject, onMounted, onUnmounted, PropType } from 'vue';
 import Button from 'primevue/button';
 import Image from 'primevue/image';
 import Skeleton from 'primevue/skeleton';
-import { PropType } from 'vue';
+import { Subscription } from 'rxjs';
 import Overlay from '@/components/Overlay.vue';
 import TableField from '@/components/TableField.vue';
 import LazyTeleport from '@/components/LazyTeleport.vue';
 import ReportStatus from '@/components/reports/ReportStatus.vue';
+import ReportsRealtimeInjector, { IRealtimeReportChanges, ReportsRealtimeService } from '@/data/reports-realtime.data';
 import dateFilter from '@/filters/date';
 import fileSizeFilter from '@/filters/file-size';
 import imageDimensionsFilter from '@/filters/image-dimensions';
 import reportStatusFilter from '@/filters/report-status';
 import { ReportDetailsModel } from '@/models/report-details.model';
 
-defineProps({
+const realtime = inject(ReportsRealtimeInjector) as ReportsRealtimeService;
+
+const subscriptions: Subscription[] = [];
+
+const props = defineProps({
   report: {
     type: Object as PropType<ReportDetailsModel>,
     required: true
@@ -97,7 +103,21 @@ defineProps({
     default: false
   }
 });
-defineEmits(['refresh']);
+const emit = defineEmits(['refresh', 'changed']);
+
+onMounted(() => {
+  subscriptions.push(realtime.changes$.subscribe(handleRealtimeUpdate));
+});
+
+onUnmounted(() => {
+  subscriptions.forEach((s) => s.unsubscribe());
+});
+
+function handleRealtimeUpdate(event: IRealtimeReportChanges): void {
+  if (event.id === props.report.id) {
+    emit('changed', event);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
