@@ -6,8 +6,8 @@
     </header>
     <main class="mb-5">
       <div class="p-float-label">
-        <InputText id="name" type="text" v-model="form.email" v-focus class="w-full" :class="{'p-invalid': formV.email.$error }"/>
-        <label for="name">Email</label>
+        <InputText id="email" type="email" v-model="form.email" v-focus class="w-full" :class="{'p-invalid': formV.email.$error }"/>
+        <label for="email">Email</label>
       </div>
       <p v-if="formV.email.$error" class="m-2 p-error">{{ formV.email.$errors[0].$message }}</p>
     </main>
