@@ -60,10 +60,9 @@
         </dl>
       </main>
     </section>
-    <div class="loading-overlay absolute top-0 left-0 right-0 bottom-0 bg-black-alpha-50 flex align-items-center justify-content-center"
-         v-if="error">
+    <Overlay class="loading-overlay" v-if="error">
       <Button icon="pi pi-refresh" class="text-white p-button-text" :disabled="loading" @click="$emit('refresh')"/>
-    </div>
+    </Overlay>
   </div>
 </template>
 
@@ -72,6 +71,8 @@ import Button from 'primevue/button';
 import Image from 'primevue/image';
 import Skeleton from 'primevue/skeleton';
 import { PropType } from 'vue';
+import Overlay from '@/components/Overlay.vue';
+import TableField from '@/components/TableField.vue';
 import LazyTeleport from '@/components/LazyTeleport.vue';
 import ReportStatus from '@/components/reports/ReportStatus.vue';
 import dateFilter from '@/filters/date';
@@ -79,7 +80,6 @@ import fileSizeFilter from '@/filters/file-size';
 import imageDimensionsFilter from '@/filters/image-dimensions';
 import reportStatusFilter from '@/filters/report-status';
 import { ReportDetailsModel } from '@/models/report-details.model';
-import TableField from '@/components/TableField.vue';
 
 defineProps({
   report: {

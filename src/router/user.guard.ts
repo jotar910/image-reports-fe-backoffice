@@ -1,8 +1,11 @@
+import { App } from 'vue';
 import { Router } from 'vue-router';
+import AuthenticationInjector, { AuthenticationService } from '@/data/authentication.data';
 
-export default (router: Router) => {
+export default (app: App, router: Router) => {
   router.beforeEach((to, from, next) => {
-    if (to.name !== 'Login' && !localStorage.getItem('user')) {
+    const service = app._context.provides[AuthenticationInjector] as AuthenticationService;
+    if (to.name !== 'Login' && !service.isLoggedIn()) {
       next({ name: 'Login' });
     } else {
       next();

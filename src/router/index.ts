@@ -1,5 +1,6 @@
+import { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import useUserGuard from './user.guard';
+import userGuard from '@/router/user.guard';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -29,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/UIShowcaseView3.vue'),
+    component: () => import(/* webpackChunkName: "Login" */ '../views/LoginView.vue'),
     meta: { transition: 'fade' }
   },
   {
@@ -43,4 +44,8 @@ const router = createRouter({
   routes
 });
 
-export default useUserGuard(router);
+export default {
+  install: (app: App) => {
+    app.use(userGuard(app, router));
+  }
+};
