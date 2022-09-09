@@ -28,10 +28,10 @@ import ReportDetails from '@/components/reports/details/ReportDetails.vue';
 import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeader.vue';
 import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
 import { ReportsFactory } from '@/factories/reports.factory';
-import ReportsInjector, { ReportsService } from '@/data/reports.data';
+import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
-const service = inject(ReportsInjector) as ReportsService;
+const service = inject(ReportsInjector) as IReportsService;
 
 const visible = ref(false);
 const error = ref(false);

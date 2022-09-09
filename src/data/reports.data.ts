@@ -4,13 +4,18 @@ import { ListFiltersModel } from '@/models/list-filters.model';
 import { ReportsFactory } from '@/factories/reports.factory';
 import { CreateReportModel } from '@/models/create-report.model';
 import { ReportDetailsModel } from '@/models/report-details.model';
+import { ReportApprovalStatusType } from '@/models/report-status.type';
 
 export default Symbol('Reports provider identifier');
 
 export interface IReportsService {
   add(report: CreateReportModel): Promise<void>;
+
   get(id: number): Promise<ReportDetailsModel>;
+
   getList({ page, count }: ListFiltersModel): Promise<PageableModel<ReportListItemModel>>;
+
+  publish(id: number, status: ReportApprovalStatusType): Promise<void>;
 }
 
 export class ReportsService implements IReportsService {
@@ -56,6 +61,19 @@ export class ReportsService implements IReportsService {
           content: items.slice(page * count, (page + 1) * count)
         });
       }, 2000);
+    });
+  }
+
+  publish(id: number, status: ReportApprovalStatusType): Promise<void> {
+    console.log('Publish', id, status);
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (Math.random() < 0.2) {
+          reject('Error');
+          return;
+        }
+        resolve();
+      }, 500);
     });
   }
 }

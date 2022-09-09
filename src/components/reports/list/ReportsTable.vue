@@ -89,7 +89,7 @@ import Skeleton from 'primevue/skeleton';
 import { Subscription } from 'rxjs';
 import dateFilter from '@/filters/date';
 import DataTableInjector, { IDataTableConfig } from '@/configs/datatable.config';
-import ReportsInjector, { ReportsService } from '@/data/reports.data';
+import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import ReportsRealtimeInjector, { IRealtimeReportChanges, ReportsRealtimeService } from '@/data/reports-realtime.data';
 import TableField from '@/components/TableField.vue';
 import ReportEvaluation from '@/components/reports/ReportEvaluation.vue';
@@ -103,7 +103,7 @@ import { PageableModel } from '@/models/pageable.model';
 import { ListFiltersModel } from '@/models/list-filters.model';
 import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
-const service = inject(ReportsInjector) as ReportsService;
+const service = inject(ReportsInjector) as IReportsService;
 const realtime = inject(ReportsRealtimeInjector) as ReportsRealtimeService;
 const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
 
@@ -173,9 +173,8 @@ function handleFetchTableDataError() {
 
 function handleRealtimeUpdate(event: IRealtimeReportChanges): void {
   const reportIndex = list.value.content.findIndex((item) => item.id === event.id);
-  if (reportIndex === -1) {
-    return;
+  if (reportIndex !== -1) {
+    list.value.content[reportIndex] = merge(list.value.content[reportIndex], event);
   }
-  list.value.content[reportIndex] = merge(list.value.content[reportIndex], event);
 }
 </script>

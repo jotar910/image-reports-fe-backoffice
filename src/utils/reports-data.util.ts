@@ -17,4 +17,8 @@ export class NoopReportsService implements IReportsService {
   getList(): Promise<PageableModel<ReportListItemModel>> {
     return Promise.resolve(PageableFactory.emptyPageable());
   }
+
+  publish(): Promise<void> {
+    return Promise.resolve();
+  }
 }

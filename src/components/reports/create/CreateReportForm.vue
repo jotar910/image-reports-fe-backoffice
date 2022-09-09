@@ -64,21 +64,20 @@ import InputText from 'primevue/inputtext';
 import RadioButton from 'primevue/radiobutton';
 import { useToast } from 'primevue/usetoast';
 import FileUploadInjector, { IFileUploadConfig } from '@/configs/fileupload.config';
-import ToastInjector, { IToastConfig } from '@/configs/toast.config';
-import ReportsInjector, { ReportsService } from '@/data/reports.data';
+import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import { CreateReportFactory } from '@/factories/create-report.factory';
+import { useToastService } from '@/utils/toast-service.utils';
 import { CreateReportModel } from '@/models/create-report.model';
 
-const service = inject(ReportsInjector) as ReportsService;
+const service = inject(ReportsInjector) as IReportsService;
 const fileUploadConfigs = inject(FileUploadInjector) as IFileUploadConfig;
-const toastConfigs = inject(ToastInjector) as IToastConfig;
 
 const form: CreateReportModel = reactive(CreateReportFactory.emptyForm());
 const hasFiles = ref(false);
 const submitting = ref(false);
 
 const formV = useVuelidate(CreateReportFactory.formValidations(form), form);
-const toast = useToast();
+const toast = useToastService(useToast());
 
 const emit = defineEmits(['submitted']);
 
@@ -97,20 +96,12 @@ function submit() {
 
 function handleSubmitSuccess() {
   emit('submitted');
-  toast.add({
-    ...toastConfigs.success,
-    summary: 'New report created!',
-    detail: `We added a new report to the system! You can check it on the report's list`
-  });
+  toast.createReportSuccess();
   submitting.value = false;
 }
 
 function handleSubmitError() {
-  toast.add({
-    ...toastConfigs.error,
-    summary: 'Something went wrong!',
-    detail: `We couldn't add your report image right now! Please try again later.`
-  });
+  toast.createReportError();
   submitting.value = false;
 }
 

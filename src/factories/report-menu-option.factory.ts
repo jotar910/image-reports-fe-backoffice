@@ -1,3 +1,4 @@
+import { MenuItemCommandEvent } from 'primevue/menuitem';
 import { ReportMenuOption } from '@/models/report-menu-option.model';
 import { ReportListItemModel } from '@/models/report-list-item.model';
 
@@ -9,15 +10,19 @@ export class ReportMenuOptionFactory {
     to: `/${config.id}`
   });
 
-  static approveOption = (config: ReportListItemModel): ReportMenuOption => ({
+  static approveOption = (config: ReportListItemModel, command: (event: MenuItemCommandEvent) => void): ReportMenuOption => ({
     key: 'Approve',
     label: 'Approve',
-    visible: () => config.status === 'PENDING'
+    visible: () => config.status === 'PENDING',
+    command
+
   });
 
-  static rejectOption = (config: ReportListItemModel): ReportMenuOption => ({
+  static rejectOption = (config: ReportListItemModel, command: (event: MenuItemCommandEvent) => void): ReportMenuOption => ({
     key: 'Reject',
     label: 'Reject',
-    visible: () => config.status === 'PENDING'
+    visible: () => config.status === 'PENDING',
+    command
+
   });
 }

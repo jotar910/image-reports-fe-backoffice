@@ -29,11 +29,11 @@ import PageLayout from '@/components/PageLayout.vue';
 import ReportDetails from '@/components/reports/details/ReportDetails.vue';
 import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeader.vue';
 import { ReportsFactory } from '@/factories/reports.factory';
-import ReportsInjector, { ReportsService } from '@/data/reports.data';
+import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
 import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
-const service = inject(ReportsInjector) as ReportsService;
+const service = inject(ReportsInjector) as IReportsService;
 
 const error = ref(false);
 const loading = ref(false);
