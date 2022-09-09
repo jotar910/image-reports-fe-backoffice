@@ -1,9 +1,10 @@
 <template>
   <Sidebar v-model:visible="visible" position="right" class="p-sidebar-lg sidebar-h-full">
     <ReportDetails :report="report" :loading="loading" :error="error" class="relative"
-                   @change="updateReportDetails" @refresh="fetchReportDetails">
+                   @changed="updateReportDetails" @refresh="fetchReportDetails">
       <template #header>
-        <ReportDetailsHeader :report="report" :loading="loading" :error="error" :showStatus="false">
+        <ReportDetailsHeader :report="report" :loading="loading" :error="error" :disable="publishing" :showStatus="false"
+                             @approve="publishReport('APPROVED')" @reject="publishReport('REJECTED')">
           <router-link :to="'/'+report.id" class="p-button p-button-link p-button-secondary text-body truncate p-0">
             <h1 class="typ-header-sm-medium my-3">Report name</h1>
           </router-link>
@@ -29,7 +30,9 @@ import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeade
 import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
 import { ReportsFactory } from '@/factories/reports.factory';
 import ReportsInjector, { IReportsService } from '@/data/reports.data';
-import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
+import { useHandleFetch } from '@/utils/handle-fetch.util';
+import { usePublishReport } from '@/utils/publish-report.util';
+import { ReportApprovalStatusType } from '@/models/report-status.type';
 
 const service = inject(ReportsInjector) as IReportsService;
 
@@ -37,7 +40,10 @@ const visible = ref(false);
 const error = ref(false);
 const loading = ref(false);
 const report = ref(ReportsFactory.emptyReportDetails());
-const dataFetcher = HandleFetchUtilFactory.createInstance(loading, error, report);
+const publishing = ref(false);
+
+const dataFetcher = useHandleFetch(loading, error, report);
+const publisher = usePublishReport(publishing);
 
 const emit = defineEmits(['close']);
 defineExpose({ show, close });
@@ -58,5 +64,9 @@ function updateReportDetails(changes: IRealtimeReportChanges) {
 
 function fetchReportDetails(id: number) {
   dataFetcher.fetch(() => service.get(id)).do();
+}
+
+function publishReport(status: ReportApprovalStatusType) {
+  publisher.publish(report.value.id, status);
 }
 </script>

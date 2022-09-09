@@ -1,7 +1,9 @@
 <template>
   <PageLayout>
     <template #header>
-      <ReportDetailsHeader :report="report">
+      <ReportDetailsHeader :report="report" :disable="publishing"
+                           @approve="publishReport('APPROVED')"
+                           @reject="publishReport('REJECTED')">
         <h1 class="typ-header-sm-bold truncate">Report name</h1>
       </ReportDetailsHeader>
     </template>
@@ -14,7 +16,7 @@
     <Card>
       <template #content>
         <ReportDetails :loading="loading" :error="error" :report="report" class="details-grid"
-                       @change="updateReportDetails" @refresh="fetchReportDetails"/>
+                       @changed="updateReportDetails" @refresh="fetchReportDetails"/>
       </template>
     </Card>
   </PageLayout>
@@ -31,14 +33,19 @@ import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeade
 import { ReportsFactory } from '@/factories/reports.factory';
 import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
-import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
+import { useHandleFetch } from '@/utils/handle-fetch.util';
+import { usePublishReport } from '@/utils/publish-report.util';
+import { ReportApprovalStatusType } from '@/models/report-status.type';
 
 const service = inject(ReportsInjector) as IReportsService;
 
 const error = ref(false);
 const loading = ref(false);
 const report = ref(ReportsFactory.emptyReportDetails());
-const dataFetcher = HandleFetchUtilFactory.createInstance(loading, error, report);
+const publishing = ref(false);
+
+const dataFetcher = useHandleFetch(loading, error, report);
+const publisher = usePublishReport(publishing);
 
 const route = useRoute();
 
@@ -52,6 +59,10 @@ function fetchReportDetails() {
 
 function updateReportDetails(changes: IRealtimeReportChanges) {
   report.value = merge(report.value, changes);
+}
+
+function publishReport(status: ReportApprovalStatusType) {
+  publisher.publish(report.value.id, status);
 }
 </script>
 

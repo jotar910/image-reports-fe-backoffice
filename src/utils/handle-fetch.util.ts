@@ -1,10 +1,22 @@
-import { Ref } from 'vue';
+import { inject, Ref } from 'vue';
 import { noop } from 'rxjs';
 
-export default Symbol('Handle fetch util provider identifier');
+const HandleFetchUtilInjector = Symbol('Handle fetch util provider identifier');
+export default HandleFetchUtilInjector;
 
-export interface IHandleFetchUtil<TValue, TError = unknown> {
-  fetch(fetchCb: () => Promise<TValue>): IFetchUtil<TValue, TError>
+export const useHandleFetch = <TValue, TError = unknown>(
+  loading: Ref<boolean>,
+  error: Ref<boolean>,
+  data: Ref<TValue>
+): IHandleFetchUtil<TValue, TError> => {
+  const HandleFetch = inject(HandleFetchUtilInjector) as IHandleFetchUtilClass<TValue, TError>;
+  return new HandleFetch(loading, error, data);
+};
+
+type IHandleFetchUtilClass<TValue, TError> = new(loading: Ref<boolean>, error: Ref<boolean>, data: Ref<TValue>) => IHandleFetchUtil<TValue, TError>;
+
+interface IHandleFetchUtil<TValue, TError = unknown> {
+  fetch(fetchCb: () => Promise<TValue>): IFetchUtil<TValue, TError>;
 }
 
 type FetchUtilOperations = 'before' | 'after' | 'success' | 'error';

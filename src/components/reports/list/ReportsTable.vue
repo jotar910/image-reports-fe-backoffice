@@ -98,10 +98,10 @@ import ReportsErrorPlaceholder from '@/components/reports/list/ReportsErrorPlace
 import ReportsOptions from '@/components/reports/list/ReportsOptions.vue';
 import { PageableFactory } from '@/factories/pageable.factory';
 import { ReportsFactory } from '@/factories/reports.factory';
+import { useHandleFetch } from '@/utils/handle-fetch.util';
 import { ReportListItemModel } from '@/models/report-list-item.model';
 import { PageableModel } from '@/models/pageable.model';
 import { ListFiltersModel } from '@/models/list-filters.model';
-import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
 const service = inject(ReportsInjector) as IReportsService;
 const realtime = inject(ReportsRealtimeInjector) as ReportsRealtimeService;
@@ -115,7 +115,8 @@ const rows = ref(tableConfigs.defaultRows);
 const list: Ref<PageableModel<ReportListItemModel>> = ref(emptyPage);
 const loading = ref(false);
 const error = ref(false);
-const dataFetcher = HandleFetchUtilFactory.createInstance(loading, error, list);
+
+const dataFetcher = useHandleFetch(loading, error, list);
 
 defineEmits(['addReport', 'select']);
 defineExpose({ refresh: fetchInitialTableData });
