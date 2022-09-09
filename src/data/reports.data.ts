@@ -7,7 +7,13 @@ import { ReportDetailsModel } from '@/models/report-details.model';
 
 export default Symbol('Reports provider identifier');
 
-export class ReportsService {
+export interface IReportsService {
+  add(report: CreateReportModel): Promise<void>;
+  get(id: number): Promise<ReportDetailsModel>;
+  getList({ page, count }: ListFiltersModel): Promise<PageableModel<ReportListItemModel>>;
+}
+
+export class ReportsService implements IReportsService {
   add(report: CreateReportModel): Promise<void> {
     console.log('Submitting', report);
     return new Promise((resolve, reject) => {
