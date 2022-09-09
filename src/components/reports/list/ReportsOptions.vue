@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineExpose, nextTick, Ref, ref } from 'vue';
+import { nextTick, Ref, ref } from 'vue';
 import ContextMenu from 'primevue/contextmenu';
 import Menu from 'primevue/menu';
 import { ReportMenuOptionFactory } from '@/factories/report-menu-option.factory';

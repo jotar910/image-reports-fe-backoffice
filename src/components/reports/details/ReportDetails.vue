@@ -113,17 +113,14 @@ defineEmits(['refresh']);
   max-width: 100%;
   position: relative;
 
-  ::v-deep {
-    img {
-      border-radius: 8px;
-      height: 100%;
-      max-width: 100%;
-      object-fit: cover;
-    }
+  :deep(img) {
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+  }
 
-    .p-image-preview-indicator {
-      border-radius: 8px;
-    }
+  :deep(img, .p-image-preview-indicator) {
+    border-radius: 8px;
   }
 
   dl {
@@ -179,13 +176,11 @@ defineEmits(['refresh']);
 .loading-overlay {
   border-radius: 8px;
 
-  ::v-deep {
-    .p-button {
-      width: auto;
+  :deep(.p-button) {
+    width: auto;
 
-      .pi {
-        @extend %typ-header-lg;
-      }
+    .pi {
+      @extend %typ-header-lg;
     }
   }
 }
