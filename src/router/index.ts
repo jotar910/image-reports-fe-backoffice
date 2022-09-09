@@ -5,8 +5,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'ReportsList',
-    component: () => import(/* webpackChunkName: "ReportsListView" */ '../views/ReportsListView.vue'),
+    component: () => import(/* webpackChunkName: "ReportsList" */ '../views/ReportsListView.vue'),
     meta: { transition: 'slide-left' }
+  },
+  {
+    path: '/:id(\\d+)',
+    name: 'ReportDetails',
+    component: () => import(/* webpackChunkName: "ReportDetails" */ '../views/ReportDetailsView.vue'),
+    meta: { transition: 'slide-right' }
   },
   {
     path: '/prev',
@@ -25,6 +31,10 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Login',
     component: () => import(/* webpackChunkName: "login" */ '../views/UIShowcaseView3.vue'),
     meta: { transition: 'fade' }
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/'
   }
 ];
 
