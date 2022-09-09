@@ -16,18 +16,6 @@ const routes: Array<RouteRecordRaw> = [
     meta: { transition: 'slide-right' }
   },
   {
-    path: '/prev',
-    name: 'UIShowcasePrev',
-    component: () => import(/* webpackChunkName: "showCaseOne" */ '../views/UIShowcaseView.vue'),
-    meta: { transition: 'slide-left' }
-  },
-  {
-    path: '/next',
-    name: 'UIShowcaseNext',
-    component: () => import(/* webpackChunkName: "showCaseTwo" */ '../views/UIShowcaseView2.vue'),
-    meta: { transition: 'slide-right' }
-  },
-  {
     path: '/logout',
     name: 'Logout',
     component: () => import(/* webpackChunkName: "Logout" */ '../views/LogoutView.vue')
