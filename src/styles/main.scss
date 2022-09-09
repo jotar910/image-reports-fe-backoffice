@@ -19,6 +19,7 @@
 
 body {
   @extend %default-font;
+  background-color: var(--body-background-color);
   margin: 0;
   overflow: hidden;
 }

@@ -28,10 +28,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: { transition: 'slide-right' }
   },
   {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import(/* webpackChunkName: "Logout" */ '../views/LogoutView.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "Login" */ '../views/LoginView.vue'),
-    meta: { transition: 'fade' }
+    component: () => import(/* webpackChunkName: "Login" */ '../views/LoginView.vue')
   },
   {
     path: '/:catchAll(.*)',

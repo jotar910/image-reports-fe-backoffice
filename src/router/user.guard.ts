@@ -5,7 +5,19 @@ import AuthenticationInjector, { AuthenticationService } from '@/data/authentica
 export default (app: App, router: Router) => {
   router.beforeEach((to, from, next) => {
     const service = app._context.provides[AuthenticationInjector] as AuthenticationService;
-    if (to.name !== 'Login' && !service.isLoggedIn()) {
+    const isLoginRoute = to.name === 'Login';
+    const isLoggedIn = service.isLoggedIn();
+
+    if (isLoginRoute) {
+      if (isLoggedIn) {
+        next({ name: 'ReportsList' });
+      } else {
+        next();
+      }
+      return;
+    }
+
+    if (!isLoggedIn) {
       next({ name: 'Login' });
     } else {
       next();
