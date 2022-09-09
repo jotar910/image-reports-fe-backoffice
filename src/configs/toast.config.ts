@@ -1,3 +1,5 @@
+export default Symbol('Toast configs provider identifier');
+
 export interface IToastConfig {
   error: IConfig;
   warning: IConfig;
@@ -26,5 +28,3 @@ export const createToastConfig = (): IToastConfig => ({
     closable: true
   },
 });
-
-export default Symbol('Toast configs provider identifier');

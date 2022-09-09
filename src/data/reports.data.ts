@@ -5,6 +5,8 @@ import { ReportsFactory } from '@/factories/reports.factory';
 import { CreateReportModel } from '@/models/create-report.model';
 import { ReportDetailsModel } from '@/models/report-details.model';
 
+export default Symbol('Reports provider identifier');
+
 export class ReportsService {
   add(report: CreateReportModel): Promise<void> {
     console.log('Submitting', report);
@@ -51,5 +53,3 @@ export class ReportsService {
     });
   }
 }
-
-export default Symbol('Reports provider identifier');

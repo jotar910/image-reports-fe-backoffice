@@ -1,3 +1,5 @@
+export default Symbol('Data table configs provider identifier');
+
 export interface IDataTableConfig {
   defaultRows: number;
   rowsPerPage: number[];
@@ -11,5 +13,3 @@ export const createDataTableConfig = (): IDataTableConfig => ({
   pageLinkSize: 3,
   paginatorPosition: 'top'
 });
-
-export default Symbol('Data table configs provider identifier');

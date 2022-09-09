@@ -83,7 +83,7 @@ import { inject, onMounted, Ref, ref } from 'vue';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
-import DataTable, { DataTablePageEvent, DataTableRowSelectEvent } from 'primevue/datatable';
+import DataTable, { DataTablePageEvent } from 'primevue/datatable';
 import Skeleton from 'primevue/skeleton';
 import dateFilter from '@/filters/date';
 import DataTableInjector, { IDataTableConfig } from '@/configs/datatable.config';
@@ -98,6 +98,7 @@ import { ReportsFactory } from '@/factories/reports.factory';
 import { ReportListItemModel } from '@/models/report-list-item.model';
 import { PageableModel } from '@/models/pageable.model';
 import { ListFiltersModel } from '@/models/list-filters.model';
+import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
 const service = inject(ReportsInjector) as ReportsService;
 const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
@@ -105,10 +106,11 @@ const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
 const emptyPage: PageableModel<ReportListItemModel> = PageableFactory.emptyPageable();
 const loadingItems: ReportListItemModel[] = ReportsFactory.emptyReportListItems(5);
 
-const list: Ref<PageableModel<ReportListItemModel>> = ref(emptyPage);
 const rows = ref(tableConfigs.defaultRows);
+const list: Ref<PageableModel<ReportListItemModel>> = ref(emptyPage);
 const loading = ref(false);
 const error = ref(false);
+const dataFetcher = HandleFetchUtilFactory.createInstance(loading, error, list);
 
 defineEmits(['addReport', 'select']);
 defineExpose({ refresh: fetchInitialTableData });
@@ -132,26 +134,30 @@ function changeTablePage(event: DataTablePageEvent): void {
 }
 
 function fetchTableData(filters: ListFiltersModel): void {
+  dataFetcher.fetch(() => service.getList(filters))
+    .before(beforeFetchTableData)
+    .after(afterFetchTableData)
+    .success(handleFetchTableDataSuccess)
+    .error(handleFetchTableDataError)
+    .do();
+}
+
+function beforeFetchTableData() {
   loading.value = true;
   error.value = false;
   list.value = Object.assign({}, list.value, { content: loadingItems });
-  service.getList(filters)
-    .then((value) => handleFetchTableDataSuccess(value))
-    .catch(() => handleFetchTableDataError());
+}
+
+function afterFetchTableData() {
+  loading.value = false;
 }
 
 function handleFetchTableDataSuccess(value: PageableModel<ReportListItemModel>) {
   list.value = value;
-  loading.value = false;
 }
 
 function handleFetchTableDataError() {
   list.value = emptyPage;
   error.value = true;
-  loading.value = false;
-}
-
-function onRowSelect(_: DataTableRowSelectEvent) {
-  // TODO
 }
 </script>

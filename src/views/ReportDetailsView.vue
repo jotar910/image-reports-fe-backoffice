@@ -28,14 +28,14 @@ import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeade
 import { ReportsFactory } from '@/factories/reports.factory';
 import { inject, onMounted, ref } from 'vue';
 import ReportsInjector, { ReportsService } from '@/data/reports.data';
-import { HandleFetchUtil } from '@/utils/handle-fetch.util';
+import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
 const service = inject(ReportsInjector) as ReportsService;
 
 const error = ref(false);
 const loading = ref(false);
 const report = ref(ReportsFactory.emptyReportDetails());
-const dataFetcher = new HandleFetchUtil(loading, error, report);
+const dataFetcher = HandleFetchUtilFactory.createInstance(loading, error, report);
 
 const route = useRoute();
 
@@ -44,7 +44,7 @@ onMounted(() => {
 });
 
 function fetchReportDetails() {
-  dataFetcher.fetch(() => service.get(+route.params.id));
+  dataFetcher.fetch(() => service.get(+route.params.id)).do();
 }
 </script>
 

@@ -11,6 +11,7 @@ import App from './App.vue';
 import router from './router';
 import ConfigProviders from '@/plugins/config-providers.plugin';
 import DataProviders from '@/plugins/data-providers.plugin';
+import UtilProviders from '@/plugins/util-providers.plugin';
 import FocusDirective from '@/directives/focus.directive';
 
 createApp(App)
@@ -19,5 +20,6 @@ createApp(App)
   .use(ToastService)
   .use(ConfigProviders)
   .use(DataProviders)
+  .use(UtilProviders)
   .directive('focus', FocusDirective)
   .mount('#app');

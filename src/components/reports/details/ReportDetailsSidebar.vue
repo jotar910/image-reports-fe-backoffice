@@ -26,7 +26,7 @@ import ReportDetails from '@/components/reports/details/ReportDetails.vue';
 import ReportDetailsHeader from '@/components/reports/details/ReportDetailsHeader.vue';
 import { ReportsFactory } from '@/factories/reports.factory';
 import ReportsInjector, { ReportsService } from '@/data/reports.data';
-import { HandleFetchUtil } from '@/utils/handle-fetch.util';
+import { HandleFetchUtilFactory } from '@/factories/handle-fetch-util.factory';
 
 const service = inject(ReportsInjector) as ReportsService;
 
@@ -34,7 +34,7 @@ const visible = ref(false);
 const error = ref(false);
 const loading = ref(false);
 const report = ref(ReportsFactory.emptyReportDetails());
-const dataFetcher = new HandleFetchUtil(loading, error, report);
+const dataFetcher = HandleFetchUtilFactory.createInstance(loading, error, report);
 
 const emit = defineEmits(['close']);
 defineExpose({ show, close });
@@ -50,6 +50,6 @@ function close<T>(payload?: T) {
 }
 
 function fetchReportDetails(id: number) {
-  dataFetcher.fetch(() => service.get(id));
+  dataFetcher.fetch(() => service.get(id)).do();
 }
 </script>
