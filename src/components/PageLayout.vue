@@ -14,11 +14,24 @@
         <slot></slot>
       </div>
     </main>
+    <footer class="py-3 card-spacer flex justify-content-end" v-if="isLoggedIn">
+      <span class="mr-2 p-2 typ-body-md-thin">{{ user || 'Unknown' }}</span>
+      <router-link to="/logout" class="p-button p-button-text p-button-secondary p-2 typ-body-md-thin block border-none">
+        Logout
+      </router-link>
+    </footer>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed, inject } from 'vue';
 import Card from 'primevue/card';
+import AuthenticationInjector, { AuthenticationService } from '@/data/authentication.data';
+
+const service = inject(AuthenticationInjector) as AuthenticationService;
+
+const user = computed(() => service.user());
+const isLoggedIn = computed(() => service.isLoggedIn());
 </script>
 
 <style lang="scss" scoped>
