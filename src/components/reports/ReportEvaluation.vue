@@ -5,7 +5,7 @@
                :class="{'color-info': report.status === 'EVALUATING' || report.status === 'PENDING', 'color-success': report.status === 'PUBLISHED' && report.approval.status === 'APPROVED', 'color-error': report.status === 'PUBLISHED' && report.approval.status === 'REJECTED'}"/>
   <span class="align-items-center flex justify-content-center w-3rem">
     <template v-if="report.status === 'PENDING' || report.status === 'PUBLISHED'">
-      {{ report.evaluation?.grade }}%
+      {{ report.evaluation?.grade || 0 }}%
     </template>
   </span>
 </template>

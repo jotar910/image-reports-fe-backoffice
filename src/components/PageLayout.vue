@@ -30,7 +30,7 @@ import AuthenticationInjector, { AuthenticationService } from '@/data/authentica
 
 const service = inject(AuthenticationInjector) as AuthenticationService;
 
-const user = computed(() => service.user());
+const user = computed(() => service.email());
 const isLoggedIn = computed(() => service.isLoggedIn());
 </script>
 

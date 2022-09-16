@@ -36,8 +36,10 @@ import { IRealtimeReportChanges } from '@/data/reports-realtime.data';
 import { useHandleFetch } from '@/utils/handle-fetch.util';
 import { usePublishReport } from '@/utils/publish-report.util';
 import { ReportApprovalStatusType } from '@/models/report-status.type';
+import ApiDataInjector, { IApiDataConfig } from '@/configs/apidata.config';
 
 const service = inject(ReportsInjector) as IReportsService;
+const apiConfigs = inject(ApiDataInjector) as IApiDataConfig;
 
 const error = ref(false);
 const loading = ref(false);
@@ -54,7 +56,7 @@ onMounted(() => {
 });
 
 function fetchReportDetails() {
-  dataFetcher.fetch(() => service.get(+route.params.id)).do();
+  dataFetcher.fetch(() => service.get(+route.params.id, apiConfigs)).do();
 }
 
 function updateReportDetails(changes: IRealtimeReportChanges) {

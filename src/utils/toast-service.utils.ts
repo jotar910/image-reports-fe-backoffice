@@ -45,4 +45,12 @@ export class ToastServiceUtils {
       detail: `We couldn't publish the report as ${status.toLowerCase()}! Please try again later.`
     });
   }
+
+  reportLoginError() {
+    this.toast.add({
+      ...this.configs.error,
+      summary: 'Something went wrong!',
+      detail: `Wrong username or password.`
+    });
+  }
 }

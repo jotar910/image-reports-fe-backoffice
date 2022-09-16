@@ -68,9 +68,11 @@ import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import { CreateReportFactory } from '@/factories/create-report.factory';
 import { useToastService } from '@/utils/toast-service.utils';
 import { CreateReportModel } from '@/models/create-report.model';
+import ApiDataInjector, { IApiDataConfig } from '@/configs/apidata.config';
 
 const service = inject(ReportsInjector) as IReportsService;
 const fileUploadConfigs = inject(FileUploadInjector) as IFileUploadConfig;
+const apiConfigs = inject(ApiDataInjector) as IApiDataConfig;
 
 const form: CreateReportModel = reactive(CreateReportFactory.emptyForm());
 const hasFiles = ref(false);
@@ -89,7 +91,7 @@ function submit() {
     return;
   }
   submitting.value = true;
-  service.add(form)
+  service.add(form, apiConfigs)
     .then(() => handleSubmitSuccess())
     .catch(() => handleSubmitError());
 }

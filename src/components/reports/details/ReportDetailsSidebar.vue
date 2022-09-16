@@ -33,8 +33,10 @@ import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import { useHandleFetch } from '@/utils/handle-fetch.util';
 import { usePublishReport } from '@/utils/publish-report.util';
 import { ReportApprovalStatusType } from '@/models/report-status.type';
+import ApiDataInjector, { IApiDataConfig } from '@/configs/apidata.config';
 
 const service = inject(ReportsInjector) as IReportsService;
+const apiConfigs = inject(ApiDataInjector) as IApiDataConfig;
 
 const visible = ref(false);
 const error = ref(false);
@@ -63,7 +65,7 @@ function updateReportDetails(changes: IRealtimeReportChanges) {
 }
 
 function fetchReportDetails(id: number) {
-  dataFetcher.fetch(() => service.get(id)).do();
+  dataFetcher.fetch(() => service.get(id, apiConfigs)).do();
 }
 
 function publishReport(status: ReportApprovalStatusType) {

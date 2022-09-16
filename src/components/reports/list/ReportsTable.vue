@@ -88,6 +88,7 @@ import DataTable, { DataTablePageEvent } from 'primevue/datatable';
 import Skeleton from 'primevue/skeleton';
 import { Subscription } from 'rxjs';
 import dateFilter from '@/filters/date';
+import ApiDataInjector, { IApiDataConfig } from '@/configs/apidata.config';
 import DataTableInjector, { IDataTableConfig } from '@/configs/datatable.config';
 import ReportsInjector, { IReportsService } from '@/data/reports.data';
 import ReportsRealtimeInjector, { IRealtimeReportChanges, ReportsRealtimeService } from '@/data/reports-realtime.data';
@@ -106,6 +107,7 @@ import { ListFiltersModel } from '@/models/list-filters.model';
 const service = inject(ReportsInjector) as IReportsService;
 const realtime = inject(ReportsRealtimeInjector) as ReportsRealtimeService;
 const tableConfigs = inject(DataTableInjector) as IDataTableConfig;
+const apiConfigs = inject(ApiDataInjector) as IApiDataConfig;
 
 const emptyPage: PageableModel<ReportListItemModel> = PageableFactory.emptyPageable();
 const loadingItems: ReportListItemModel[] = ReportsFactory.emptyReportListItems(5);
@@ -145,7 +147,7 @@ function changeTablePage(event: DataTablePageEvent): void {
 }
 
 function fetchTableData(filters: ListFiltersModel): void {
-  dataFetcher.fetch(() => service.getList(filters))
+  dataFetcher.fetch(() => service.getList(filters, apiConfigs))
     .before(beforeFetchTableData)
     .after(afterFetchTableData)
     .success(handleFetchTableDataSuccess)
