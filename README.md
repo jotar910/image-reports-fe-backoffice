@@ -3,6 +3,7 @@
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](#)
 
 > Prevent offensive content by managing user generated images!
+>
 > You can also generate images by yourself.
 
 ## Project setup
