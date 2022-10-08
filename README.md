@@ -1,4 +1,8 @@
-# image-reports-fe-backoffice
+# Welcome to Image Reports Backoffice 👋
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)
+[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](#)
+
+> API for managing user generated images and prevent offensive content!
 
 ## Project setup
 ```
